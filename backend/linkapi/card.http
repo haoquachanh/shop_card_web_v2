@@ -1,0 +1,21 @@
+GET http://localhost:3000/api/card/all?page=2&pageSize=2
+###
+GET http://localhost:3000/api/card/all?maxAtk=1000
+
+###
+POST http://localhost:3000/api/card
+Content-Type: application/json
+
+{
+    "name": "Blue-Eyes Solid Dragon",
+    "type": "monster",
+    "effect": "None",
+    "attribute": "Light",
+    "atk": 2500,
+    "def": 2000,
+    "info": "If this card is Normal or Special Summoned: You can target 1 face-up monster your opponent controls; negate its effects. When your opponent activates a card or effect (Quick Effect): You can shuffle this card from the field into the Deck, and if you do, Special Summon 1 'Blue-Eyes White Dragon' from your Deck. You can only use each effect of 'Blue-Eyes Solid Dragon' once per turn.",
+    "lvl": 8,
+    "rarity": "Rare",
+    "buff": 0
+}
+

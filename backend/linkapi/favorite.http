@@ -1,0 +1,23 @@
+GET http://localhost:3000/api/favorite
+
+###
+GET http://localhost:3000/
+###
+GET http://localhost:3000/api/favorite/1
+
+###
+POST http://localhost:3000/api/favorite
+Content-Type: application/json
+
+{
+    "name": "DARK MAGICIAN",
+    "type": "monster",
+    "effect": "None",
+    "atk": 2500,
+    "def": 2100,
+    "info": "A legendary wizard with formidable power.",
+    "lvl": 7,
+    "rarity": "Ultra Rare",
+    "buff": 0
+}
+

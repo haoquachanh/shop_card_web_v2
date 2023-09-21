@@ -1,0 +1,41 @@
+GET http://localhost:3000/routes-list
+
+
+###
+GET http://localhost:3000/api/user/all?roleParam=1
+
+
+###
+GET http://localhost:3000/api/user/1
+
+###
+GET http://localhost:3000/api/user/favorites/1
+
+###
+DELETE http://localhost:3000/api/user/2
+
+###
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+    "username": "user1234",
+    "password": "password",
+    "fullname": "User Full Name",
+    "email": "user12342@example.com",
+    "avt": "https://example.avt.com"
+}
+
+
+###
+PUT http://localhost:3000/api/user/2
+Content-Type: application/json
+
+{
+    "username": "user1234",
+    "password": "password",
+    "fullname": "User Full Name",
+    "email": "user12dh@example.com",
+    "avt": "https://example.avt.com"
+}
+
