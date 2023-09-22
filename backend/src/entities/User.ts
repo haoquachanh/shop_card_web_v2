@@ -1,7 +1,9 @@
-  import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinTable } from 'typeorm';
+  import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, JoinColumn,ManyToOne, OneToOne, JoinTable } from 'typeorm';
   import { Role } from './Role';
   import { Image } from './Image';
   import { Length, IsNotEmpty  } from "class-validator"
+  import {Exclude} from "class-transformer"
+  import * as bcrypt from "bcryptjs";
 
   @Entity("users")
   export class User {
@@ -10,6 +12,7 @@
 
     @Column()
     @Length(4.100)
+    @Exclude()
     password: string;
 
     @Column()
@@ -35,8 +38,29 @@
     avt: Image;
 
     @ManyToOne(() => Role, role => role.users)
+    @JoinColumn()
     @IsNotEmpty()
-    roleId: Role;
+    role: Role;
 
+    // function
+    @BeforeInsert()
+    setCreatedAt() {
+      this.createdAt = new Date();
+      this.updatedAt = new Date();
+      this.password = bcrypt.hashSync(this.password,7);
+    }
+    @BeforeUpdate()
+    setUpdatedAt() {
+      this.updatedAt = new Date();
+      this.password = bcrypt.hashSync(this.password,7);
+    }
 
+    checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+      return bcrypt.compareSync(unencryptedPassword, this.password);
+    }
+    constructor(password: string, fullname: string, email: string){
+      this.email=email;
+      this.password=password;
+      this.fullname=fullname;
+    }
   }

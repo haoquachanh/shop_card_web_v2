@@ -1,9 +1,9 @@
-GET http://localhost:3000/api/card/all?page=2&pageSize=2
+GET http://localhost:3001/api/card/all?page=2&pageSize=2
 ###
-GET http://localhost:3000/api/card/all?maxAtk=1000
+GET http://localhost:3001/api/card/all?maxAtk=1000
 
 ###
-POST http://localhost:3000/api/card
+POST http://localhost:3001/api/card
 Content-Type: application/json
 
 {

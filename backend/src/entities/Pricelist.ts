@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Product } from './Product';
 import { Image } from './Image';
 
-@Entity("questions")
-export class Question {
+@Entity("pricelists")
+export class PriceList {
   @PrimaryGeneratedColumn()
   id: number;
 

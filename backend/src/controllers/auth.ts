@@ -4,33 +4,39 @@ import { validate } from "class-validator";
 import 'dotenv/config'
 
 import { dataSource } from '../datasource';
-import { User } from '../entities/User.entity';
+import { User } from '../entities/User';
 
 
 class AuthController {
   async loginByAccount(req: Request, res: Response) {
     try {
-      let { username, password } = req.body;
-      if (!(username && password)) {
-        res.status(400).send();
+      let { email, password } = req.body;
+      if (!(email && password)) {
+        res.status(400).json({
+          err:1,
+          mes: "Missing password or email"
+        });
       }
 
       const userRepository = dataSource.getRepository(User);
       let user:User;
-      try {
-        user = await userRepository.findOneOrFail({ where: { username } });
-      } catch (error) {
-        res.status(401).send();
-      }
+      user = await userRepository.findOne({ where: { email } });
+      if (!user) return res.status(404).json({
+        err: 1,
+        mes: "User not found"
+      })
 
        //Check if encrypted password match
       if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-        res.status(401).send();
+        res.status(401).json({
+          err:1,
+          mes: "Invalid password"
+        });
         return;
       }
 
       const token = jwt.sign(
-        { userId: user.id, username: user.username },
+        { userId: user.id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -79,7 +85,6 @@ class AuthController {
       return;
     }
     //Hash the new password and save
-    user.hashPassword();
     userRepository.save(user);
 
     res.status(204).send();

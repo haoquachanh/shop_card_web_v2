@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import UserController from '../controllers/user.controller';
+import UserController from '../controllers/user';
 
 const userRouter = Router();
 const userController = new UserController();
+
 
 userRouter.get('/all', userController.getAllUsers);
 
@@ -13,7 +14,5 @@ userRouter.post('/', userController.createUser);
 userRouter.put('/:id', userController.updateUser);
 
 userRouter.delete('/:id', userController.deleteUser);
-
-userRouter.get('/favorites/:id', userController.getFavorite)
 
 export default userRouter;

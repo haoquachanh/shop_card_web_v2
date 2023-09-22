@@ -1,41 +1,37 @@
-GET http://localhost:3000/routes-list
+GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3000/api/user/all?roleParam=1
-
-
-###
-GET http://localhost:3000/api/user/1
+GET http://localhost:3001/api/user/all?page=4&pageSize=5
 
 ###
-GET http://localhost:3000/api/user/favorites/1
+GET http://localhost:3001/api/user/14
 
 ###
-DELETE http://localhost:3000/api/user/2
+DELETE http://localhost:3001/api/user/14
 
 ###
-POST http://localhost:3000/api/user
+POST http://localhost:3001/api/user
 Content-Type: application/json
 
 {
     "username": "user1234",
     "password": "password",
     "fullname": "User Full Name",
-    "email": "user12342@example.com",
+    "email": "VinhYeuNhi@example.com",
     "avt": "https://example.avt.com"
 }
 
 
 ###
-PUT http://localhost:3000/api/user/2
+
+###
+PUT http://localhost:3001/api/user/2
 Content-Type: application/json
 
 {
-    "username": "user1234",
-    "password": "password",
-    "fullname": "User Full Name",
-    "email": "user12dh@example.com",
-    "avt": "https://example.avt.com"
+    "fullname": "Nhi Đã Thay Đổi",
+    "email": "VinhYeuNhi@example.com",
+    "phone": "0123456"
 }
 

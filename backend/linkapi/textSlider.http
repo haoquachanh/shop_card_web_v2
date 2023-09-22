@@ -1,0 +1,35 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/slider/all
+
+###
+GET http://localhost:3001/api/slider/2
+
+###
+DELETE http://localhost:3001/api/slider/8
+
+###
+POST http://localhost:3001/api/slider
+Content-Type: application/json
+
+{
+    "text": "slider1234",
+    "status": "password",
+    "index": 1
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/slider/8
+Content-Type: application/json
+
+{
+    "text": "Nhi Đã Thay Đổi",
+    "status": "VinhYeuNhi@example.com",
+    "index": 2
+}
+

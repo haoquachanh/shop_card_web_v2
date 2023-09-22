@@ -1,10 +1,10 @@
 
 ###
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3001/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "user1234",
+    "email": "admin112@gmail.com",
     "password": "password"
 }
 

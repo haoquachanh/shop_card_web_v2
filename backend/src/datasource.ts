@@ -10,7 +10,7 @@ import 'dotenv/config';
     database: process.env.DB_DATABASE,
     synchronize: false,
     logging: true,
-    entities: [__dirname + '/entities/*.entity.ts'],
+    entities: [__dirname + '/entities/*.ts'],
     migrations: [__dirname + '/migrations/*.ts'],
     migrationsTableName: "migration",
     extra: {
@@ -26,3 +26,6 @@ import 'dotenv/config';
   .catch((err) => {
       console.error("Error during Data Source initialization", err)
   })
+
+
+  

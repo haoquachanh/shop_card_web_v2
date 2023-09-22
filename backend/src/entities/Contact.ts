@@ -17,7 +17,5 @@ export class Contact {
   @Column()
   status: string;
   @Column()
-  starus: string;
-  @Column()
   index: number;
 }

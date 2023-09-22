@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinTable } from 'typeorm';
 import { Role } from './Role';
-import { Favorite } from './Favorite.entity';
 import { Length, IsNotEmpty  } from "class-validator"
 import { Image } from './Image';
 import { Product } from './Product';

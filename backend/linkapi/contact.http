@@ -1,0 +1,37 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/contact/all
+
+###
+GET http://localhost:3001/api/contact/1
+
+###
+DELETE http://localhost:3001/api/contact/20
+
+###
+POST http://localhost:3001/api/contact
+Content-Type: application/json
+
+{
+    "name": "telegram",
+    "title": "3D lenticularvn",
+    "link": "http",
+    "theme": "social media",
+    "index": 1
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/contact/19
+Content-Type: application/json
+
+{
+    "text": "Nhi Đã Thay Đổi",
+    "status": "VinhYeuNhi@example.com",
+    "index": 2
+}
+
