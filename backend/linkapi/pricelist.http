@@ -1,0 +1,37 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/pricelist
+
+###
+GET http://localhost:3001/api/pricelist/1
+
+###
+DELETE http://localhost:3001/api/pricelist/10
+
+###
+POST http://localhost:3001/api/pricelist
+Content-Type: application/json
+
+{
+    "lim1": "pricelist1234",
+    "lim2": "password",
+    "value": 5000,
+    "productId": 100000,
+    "material": "wood",
+    "size": "3x4"
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/pricelist/10
+Content-Type: application/json
+
+{
+    "size": "5x8",
+    "material": "paper"
+}
+

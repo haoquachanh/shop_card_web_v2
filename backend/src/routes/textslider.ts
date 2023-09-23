@@ -5,7 +5,7 @@ const textsliderRouter = Router();
 const textsliderController = new TextSliderController();
 
 
-textsliderRouter.get('/all', textsliderController.getAll);
+textsliderRouter.get('/', textsliderController.getAll);
 
 textsliderRouter.get('/:id', textsliderController.get);
 

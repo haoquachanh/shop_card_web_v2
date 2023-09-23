@@ -2,7 +2,7 @@ GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3001/api/contact/all
+GET http://localhost:3001/api/contact
 
 ###
 GET http://localhost:3001/api/contact/1

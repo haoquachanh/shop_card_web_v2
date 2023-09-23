@@ -2,7 +2,7 @@ GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3001/api/user/all?page=4&pageSize=5
+GET http://localhost:3001/api/user?page=&pageSize=5
 
 ###
 GET http://localhost:3001/api/user/14

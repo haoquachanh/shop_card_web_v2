@@ -41,6 +41,12 @@ class QuestionController {
         const users= await queryBuilder.getMany();
         const count= await queryBuilder.getCount();
 
+        if (count === 0) return res.status(200).json({
+            err:1,
+            mes: "No have any question"
+        })
+
+
         let pageNum=Math.ceil(count/pageSize)
         if (page>pageNum) return res.status(404).json({
             err: 1,

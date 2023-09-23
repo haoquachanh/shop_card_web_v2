@@ -5,7 +5,7 @@ const questionRouter = Router();
 const questionController = new QuestionController();
 
 
-questionRouter.get('/all', questionController.getAll);
+questionRouter.get('/', questionController.getAll);
 
 questionRouter.get('/:id', questionController.get);
 

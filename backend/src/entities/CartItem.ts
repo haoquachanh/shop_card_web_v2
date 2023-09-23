@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinTable, JoinColumn } from 'typeorm';
 import { Role } from './Role';
 import { Length, IsNotEmpty  } from "class-validator"
 import { Image } from './Image';
@@ -11,10 +11,10 @@ export class CartItem {
   id: number;
 
   @OneToOne(()=>Product, i=>i.id)
-  productId: Product;
+  @JoinColumn()
+  product: Product;
   @ManyToOne(() => Cart, i=>i.id)
-  @IsNotEmpty()
-  cartId: Cart;
+  cart: Cart;
 
   @Column()
   img_src: string;
@@ -34,8 +34,4 @@ export class CartItem {
   effect: Date;
   @Column()
   size: string;
-  @Column()
-  createdAt: Date;
-  @Column()
-  updatedAt: Date;
 }

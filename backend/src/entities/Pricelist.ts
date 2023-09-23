@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { Product } from './Product';
 import { Image } from './Image';
 
@@ -7,13 +7,16 @@ export class PriceList {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(()=>Product, i=>i.id)
-  productId: Image
+  @OneToOne(()=>Product)
+  @JoinColumn()
+  product: Product;
 
   @Column()
   size: string;
   @Column()
   material: string;
+  @Column()
+  value: number;
   @Column()
   lim1: string;
   @Column()

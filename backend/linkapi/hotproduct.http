@@ -1,0 +1,36 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/hotproduct
+
+###
+GET http://localhost:3001/api/hotproduct/1
+
+###
+DELETE http://localhost:3001/api/hotproduct/6
+
+###
+POST http://localhost:3001/api/hotproduct
+Content-Type: application/json
+
+{
+    "effect": "Làm mờ",
+    "rank": 5000,
+    "productId": 100000,
+    "material": "wood",
+    "size": "3x4"
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/hotproduct/6
+Content-Type: application/json
+
+{
+    "size": "5x8",
+    "material": "paper"
+}
+

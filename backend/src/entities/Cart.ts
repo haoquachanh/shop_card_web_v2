@@ -10,8 +10,8 @@ export class Cart {
 
   @ManyToOne(()=>User,i=>i.id)
 
-  @OneToMany(()=>CartItem, i=>i.id)
-  cartItem: CartItem[];
+  @OneToMany(()=>CartItem, i=>i.cart, {cascade:true})
+  cartItems: CartItem[];
 
   @Column()
   status: string;

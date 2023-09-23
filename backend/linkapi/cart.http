@@ -2,20 +2,20 @@ GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3001/api/question
+GET http://localhost:3001/api/cart
 
 ###
-GET http://localhost:3001/api/question/23
+GET http://localhost:3001/api/cart/44
 
 ###
-DELETE http://localhost:3001/api/question/23
+DELETE http://localhost:3001/api/cart/44
 
 ###
-POST http://localhost:3001/api/question
+POST http://localhost:3001/api/cart
 Content-Type: application/json
 
 {
-    "question": "question1234",
+    "cart": "cart1234",
     "answer": "password",
     "img": "http"
 }
@@ -24,7 +24,7 @@ Content-Type: application/json
 ###
 
 ###
-PUT http://localhost:3001/api/question/8
+PUT http://localhost:3001/api/cart/8
 Content-Type: application/json
 
 {

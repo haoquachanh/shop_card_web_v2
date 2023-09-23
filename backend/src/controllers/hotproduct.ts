@@ -1,46 +1,36 @@
 import { Request, Response } from 'express';
 import { dataSource } from '../datasource';
-import { TextSlider } from '../entities/TextSlider';
 import { Brackets } from 'typeorm';
+import { HotProduct } from '../entities/HotProduct';
+import { Product } from '../entities/Product';
 
-class TextSliderController {
+class HotProductController {
     async getAll(req: Request, res: Response) {
     try {
-        const theRepository = dataSource.getRepository(TextSlider);
+        const theRepository = dataSource.getRepository(HotProduct);
         const page = parseInt(req.query.page as string) || 1;
         const pageSize = parseInt(req.query.pageSize as string) || 10;
-        const roleParam = req.query.roleParam as string; // Tham số để lọc theo loại
         const sortParam = req.query.sort as string; // Tham số để sắp xếp
         const searchKeyword = req.query.search as string;
         const skip = (page - 1) * pageSize;
     
-        console.log(page, pageSize, skip, sortParam)
         const queryBuilder = await theRepository
-            .createQueryBuilder('textSlider')
+            .createQueryBuilder('hotProduct')
             .skip(skip)
             .take(pageSize)
         
 
         if (sortParam){
             const [field, order] = sortParam.split(':');
-            queryBuilder.orderBy(`textSlider.${field}`, order as 'ASC' | 'DESC');
-        }
-
-        if (searchKeyword) {
-            queryBuilder.andWhere(new Brackets(qb => {
-            qb.where('LOWER(textSlider.text) LIKE LOWER(:searchKeyword)', {
-                searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-            });
-            }));
-        }
-        
+            queryBuilder.orderBy(`hotProduct.${field}`, order as 'ASC' | 'DESC');
+        }        
 
         const users= await queryBuilder.getMany();
         const count= await queryBuilder.getCount();
 
         if (count === 0) return res.status(200).json({
             err:1,
-            mes: "No have any textslider"
+            mes: "No have any hot products"
         })
 
         let pageNum=Math.ceil(count/pageSize)
@@ -51,7 +41,7 @@ class TextSliderController {
 
         res.status(200).json({
             err: 0,
-            mes: `Got ${count} sliders.`,
+            mes: `Got ${count} hotProduct.`,
             pageSize: pageSize,
             pageNum: pageNum,
             page: page,
@@ -71,17 +61,17 @@ class TextSliderController {
                 mes: "Missing required parameter"
             }) 
 
-            const theRepository = dataSource.getRepository(TextSlider);
-            let slider= await theRepository.findOne({where: {id:id}})            
-            if (!slider) return res.status(404).json({
+            const theRepository = dataSource.getRepository(HotProduct);
+            let pricelist= await theRepository.findOne({where: {id:id}})            
+            if (!pricelist) return res.status(404).json({
                 err: 1,
-                mes: "Slider not found"
+                mes: "Price not found"
             })
 
             res.status(200).json({
             err: 0,
-            mes: "Got slider",
-            data: slider
+            mes: "Got pricelist",
+            data: pricelist
             })
         } 
         catch (error) {
@@ -91,65 +81,83 @@ class TextSliderController {
 
     async create(req: Request, res: Response) {
     try {
-        let {text,status,index} = req.body
-        if (!(text&&status&&index)) return res.status(400).json({
+        let {size,rank,effect,material,productId} = req.body
+        if (!(size&&rank&&effect&&material&&productId)) return res.status(400).json({
             err: 1,
             mes: "Missing required parameter"
         }) 
-        const theRepository = dataSource.getRepository(TextSlider);
-        let slider:TextSlider=req.body
 
-        await theRepository.save(slider);
+        let theProduct = await dataSource.getRepository(Product).findOne({where: {id:productId}})
+        console.log(theProduct)
+
+        const theRepository = dataSource.getRepository(HotProduct);
+        let newPrice:HotProduct={...req.body, product: theProduct}
+
+        await theRepository.save(newPrice);
         res.status(200).json({
         err: 0,
-        mes: "Slider created successfully"
+        mes: "Hot product created successfully"
         })
     } 
     catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error'+ error.message });
     }
     }
 
     async update(req: Request, res: Response) {
     try {
         let id = parseInt(req.params.id);
-        let {text,status,index} = req.body
-        if (!(text||status||index)||!id) return res.status(400).json({
+        let {size,rank,effect,material,productId} = req.body
+        if (!(size||rank||effect||material||productId)||!id) return res.status(400).json({
             err: 1,
             mes: "Missing required parameter"
-        }) 
-        const theRepository = dataSource.getRepository(TextSlider);
-        let slider:TextSlider
-        slider = await theRepository.findOne({where: {id:id}})
-        slider.index = index
-        slider.status = status
-        slider.text = text
+        })
+        const theRepository = dataSource.getRepository(HotProduct);
+        let hotproductifo:HotProduct
+        hotproductifo = await theRepository.findOne({where: {id:id}})
+        if (!hotproductifo) return res.status(404).json({
+            err: 1,
+            mes: "HotProduct not found",
+        })
 
-        await theRepository.save(slider);
+        let theProduct = await dataSource.getRepository(Product).findOne({where: {id:productId}})
+        if (!theProduct) return res.status(404).json({
+            err: 1,
+            mes: "Product not found",
+        })
+
+        hotproductifo.size = size
+        hotproductifo.material = material
+        hotproductifo.effect = effect
+        hotproductifo.rank = rank
+        // hotproductifo.product = theProduct
+
+        await theRepository.save(hotproductifo);
         res.status(200).json({
         err: 0,
-        mes: "Slider updated successfully"
+        mes: "Hot product updated successfully"
         })
     } 
     catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error',
+    mes: error.message });
     }
     }
 
     async delete(req: Request, res: Response) {
     try {
         const  id  = parseInt(req.params.id);
-        const userRepository = dataSource.getRepository(TextSlider);
+        const userRepository = dataSource.getRepository(HotProduct);
         let deleter = await userRepository.findOne({where: {id: id}});
         if (!deleter) 
         return res.status(404).json({
             err: 1,
-            mes: "Slider not found"
+            mes: "Price not found"
         })
         await userRepository.remove(deleter);
         res.status(200).json({
         err: 0,
-        mes: "Slider deleted successfully"
+        mes: "Price deleted successfully"
         })
     } 
     catch (error) {
@@ -158,4 +166,4 @@ class TextSliderController {
     }
 }
 
-export default TextSliderController;
+export default HotProductController;

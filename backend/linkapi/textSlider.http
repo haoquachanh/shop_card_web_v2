@@ -2,7 +2,7 @@ GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3001/api/slider/all
+GET http://localhost:3001/api/slider
 
 ###
 GET http://localhost:3001/api/slider/2
