@@ -162,10 +162,10 @@ class UserController {
           mes: "User not found"
         })
 
-      updateUser.email= req.body.email
-      updateUser.fullname= req.body.fullname
-      updateUser.birth= req.body.birth
-      updateUser.phone= req.body.phone
+      if (email) updateUser.email= req.body.email
+      if (fullname) updateUser.fullname= req.body.fullname
+      if (birth) updateUser.birth= req.body.birth
+      if (phone) updateUser.phone= req.body.phone
 
       await userRepository.save(updateUser);
   

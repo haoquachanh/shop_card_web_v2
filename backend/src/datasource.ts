@@ -12,6 +12,7 @@ import 'dotenv/config';
     logging: true,
     entities: [__dirname + '/entities/*.ts'],
     migrations: [__dirname + '/migrations/*.ts'],
+    subscribers: [__dirname + '/subscribers/**/*.ts'],
     migrationsTableName: "migration",
     extra: {
       connectionLimit: 10,

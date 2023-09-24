@@ -126,10 +126,10 @@ class HotProductController {
             mes: "Product not found",
         })
 
-        hotproductifo.size = size
-        hotproductifo.material = material
-        hotproductifo.effect = effect
-        hotproductifo.rank = rank
+        if (size) hotproductifo.size = size
+        if (material) hotproductifo.material = material
+        if (effect) hotproductifo.effect = effect
+        if (rank) hotproductifo.rank = rank
         // hotproductifo.product = theProduct
 
         await theRepository.save(hotproductifo);

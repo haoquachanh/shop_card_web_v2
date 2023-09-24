@@ -3,6 +3,7 @@ import { dataSource } from '../datasource';
 import { Brackets } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Product } from '../entities/Product';
+import { User } from '../entities/User';
 
 class CartController {
     async getAll(req: Request, res: Response) {
@@ -94,22 +95,54 @@ class CartController {
 
     async create(req: Request, res: Response) {
     try {
-        let {size,value,lim1,lim2,material,productId} = req.body
-        if (!(size&&value&&lim1&&lim2&&material&&productId)) return res.status(400).json({
+        let userId=res.locals.jwtPayload?.userId||1 
+        //number 1 for test! DELETE when run!!!!!!!! and catch error
+        if (!userId) return res.status(500).json({
+            err: 1,
+            mes: "Missing user." 
+        })
+
+
+        let {size,effect,quantity,isDesigned,material,img_src,price,sides,name,productId} = req.body
+        if (!(size&&effect&&quantity&&isDesigned&&material&&img_src&&price&&sides&&name&&productId)) return res.status(400).json({
             err: 1,
             mes: "Missing required parameter"
         }) 
 
-        let theProduct = await dataSource.getRepository(Product).findOne({where: {id:productId}})
-        console.log(theProduct)
+        let newCart= new Cart()
+        let user = await dataSource.getRepository(User).findOne({where:{id: userId}})
+        if (!user) return res.status(404).json({
+            err: 1,
+            mes: "User not found"
+        })
 
+        let product = await dataSource.getRepository(Product).findOne({where:{id: productId}})
+        if (!product) return res.status(404).json({
+            err: 1,
+            mes: "Product not found"
+        })
+
+
+        newCart.sides = sides
+        newCart.size = size
+        newCart.img_src = img_src
+        newCart.effect = effect
+        newCart.isDesigned = isDesigned
+        newCart.material = material
+        newCart.name = name
+        newCart.price = price
+        newCart.quantity = quantity 
+        newCart.user=user
+        newCart.product=product
+        
+
+        console.log(newCart)
         const theRepository = dataSource.getRepository(Cart);
-        let newPrice:Cart={...req.body, product: theProduct}
 
-        await theRepository.save(newPrice);
+        await theRepository.save(newCart);
         res.status(200).json({
         err: 0,
-        mes: "Slider created successfully"
+        mes: "Cart created successfully"
         })
     } 
     catch (error) {
@@ -126,31 +159,31 @@ class CartController {
             mes: "Missing required parameter"
         })
         const theRepository = dataSource.getRepository(Cart);
-        let priceifo:Cart
-        priceifo = await theRepository.findOne({where: {id:id}})
-        if (!priceifo) return res.status(404).json({
+        let updater:Cart
+        updater = await theRepository.findOne({where: {id:id}})
+        if (!updater) return res.status(404).json({
             err: 1,
             mes: "Cart not found",
         })
 
-        let theProduct = await dataSource.getRepository(Product).findOne({where: {id:productId}})
-        if (!theProduct) return res.status(404).json({
-            err: 1,
-            mes: "Product not found",
-        })
+        // let theProduct = await dataSource.getRepository(Product).findOne({where: {id:productId}})
+        // if (!theProduct) return res.status(404).json({
+        //     err: 1,
+        //     mes: "Product not found",
+        // })
 
-        // priceifo.size = size
-        // priceifo.effect = effect
-        // priceifo.img_src =img_src
-        // priceifo.material = material
-        // priceifo.price = price
-        // priceifo.name = name
-        // priceifo.sides = sides
-        // priceifo.quantity = quantity
-        // priceifo.isDesigned = isDesigned
-        // priceifo.product = theProduct
+        if (size) updater.size = size
+        if (effect) updater.effect = effect
+        if (img_src) updater.img_src =img_src
+        if (material) updater.material = material
+        if (price) updater.price = price
+        if (name) updater.name = name
+        if (sides) updater.sides = sides
+        if (quantity) updater.quantity = quantity
+        if (isDesigned) updater.isDesigned = isDesigned
+        // updater.product = theProduct
 
-        await theRepository.save(priceifo);
+        await theRepository.save(updater);
         res.status(200).json({
         err: 0,
         mes: "Slider updated successfully"
@@ -165,17 +198,17 @@ class CartController {
     async delete(req: Request, res: Response) {
     try {
         const  id  = parseInt(req.params.id);
-        const userRepository = dataSource.getRepository(Cart);
-        let deleter = await userRepository.findOne({where: {id: id}});
+        const theRepository = dataSource.getRepository(Cart);
+        let deleter = await theRepository.findOne({where: {id: id}});
         if (!deleter) 
         return res.status(404).json({
             err: 1,
-            mes: "Price not found"
+            mes: "Cart not found"
         })
-        await userRepository.remove(deleter);
+        await theRepository.remove(deleter);
         res.status(200).json({
         err: 0,
-        mes: "Price deleted successfully"
+        mes: "Cart deleted successfully"
         })
     } 
     catch (error) {

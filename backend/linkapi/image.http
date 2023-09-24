@@ -1,0 +1,34 @@
+###
+GET http://localhost:3001/api/image?page=&pageSize=5
+
+###
+GET http://localhost:3001/api/image/14
+
+###
+DELETE http://localhost:3001/api/image/14
+
+###
+POST http://localhost:3001/api/image
+Content-Type: application/json
+
+{
+    "imagename": "image1234",
+    "password": "password",
+    "fullname": "User Full Name",
+    "email": "VinhYeuNhiMaimai@example.com",
+    "avt": "https://example.avt.com"
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/image/2
+Content-Type: application/json
+
+{
+    "fullname": "Nhi Đã Thay Đổi",
+    "email": "VinhYeuNhi@example.com",
+    "phone": "0123456"
+}
+

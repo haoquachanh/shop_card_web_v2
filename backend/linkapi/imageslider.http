@@ -1,0 +1,33 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/imageslider
+
+###
+GET http://localhost:3001/api/imageslider/2
+
+###
+DELETE http://localhost:3001/api/imageslider/19
+
+###
+POST http://localhost:3001/api/imageslider
+Content-Type: application/json
+
+{
+    "status": "hidden",
+    "index": 4
+}
+
+
+###
+
+###   Hàm sửa sẽ vẫn hoạt động nhưng không hoạt động với ảnh.
+PUT http://localhost:3001/api/imageslider/8
+Content-Type: application/json
+
+{
+    "status": "hidden",
+    "index": 4
+}
+

@@ -119,12 +119,12 @@ class ContactController {
             mes: "Contact not found",
         })
 
-        contact.index = index
-        contact.theme = theme
-        contact.title = title
-        contact.link = link
-        contact.name = name
-        contact.status = status
+        if (index) contact.index = index
+        if (theme) contact.theme = theme
+        if (title) contact.title = title
+        if (link) contact.link = link
+        if (name) contact.name = name
+        if (status) contact.status = status
         await theRepository.save(contact);
         res.status(200).json({
         err: 0,

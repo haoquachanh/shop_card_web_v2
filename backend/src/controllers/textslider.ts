@@ -121,9 +121,9 @@ class TextSliderController {
         const theRepository = dataSource.getRepository(TextSlider);
         let slider:TextSlider
         slider = await theRepository.findOne({where: {id:id}})
-        slider.index = index
-        slider.status = status
-        slider.text = text
+        if (index) slider.index = index
+        if (status) slider.status = status
+        if (text) slider.text = text
 
         await theRepository.save(slider);
         res.status(200).json({

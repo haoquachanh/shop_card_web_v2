@@ -140,11 +140,11 @@ class PriceListController {
             mes: "Product not found",
         })
 
-        priceifo.size = size
-        priceifo.lim1 = lim1
-        priceifo.lim2 = lim2
-        priceifo.material = material
-        priceifo.value = value
+        if (size) priceifo.size = size
+        if (lim1) priceifo.lim1 = lim1
+        if (lim2) priceifo.lim2 = lim2
+        if (material) priceifo.material = material
+        if (value) priceifo.value = value
         // priceifo.product = theProduct
 
         await theRepository.save(priceifo);

@@ -1,9 +1,10 @@
-  import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, JoinColumn,ManyToOne, OneToOne, JoinTable } from 'typeorm';
+  import { Entity,OneToMany, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, JoinColumn,ManyToOne, OneToOne, JoinTable } from 'typeorm';
   import { Role } from './Role';
   import { Image } from './Image';
   import { Length, IsNotEmpty  } from "class-validator"
   import {Exclude} from "class-transformer"
   import * as bcrypt from "bcryptjs";
+import { Cart } from './Cart';
 
   @Entity("users")
   export class User {
@@ -41,6 +42,10 @@
     @JoinColumn()
     @IsNotEmpty()
     role: Role;
+
+    @OneToMany(() => Cart, i => i.user)
+    @JoinColumn()
+    carts: Cart[];
 
     // function
     @BeforeInsert()

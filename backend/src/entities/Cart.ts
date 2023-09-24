@@ -1,24 +1,60 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinTable } from 'typeorm';
-import { Role } from './Role';
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToOne, BeforeInsert,BeforeUpdate } from 'typeorm';
 import { User } from './User';
-import { CartItem } from './CartItem';
+import { Product } from './Product';
 
 @Entity("carts")
 export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(()=>User,i=>i.id)
-
-  @OneToMany(()=>CartItem, i=>i.cart, {cascade:true})
-  cartItems: CartItem[];
+  @Column()
+  img_src: string;
 
   @Column()
-  status: string;
+  name: string;
+
+  @Column()
+  sides: string;
+
+  @Column()
+  isDesigned: string;
+
+  @Column()
+  price: number;
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  material: string;
+
+  @Column()
+  effect: string;
+
+  @Column()
+  size: string;  
+
 
   @Column()
   createdAt: Date;
   @Column()
   updatedAt: Date;
+
+  @ManyToOne(()=>User,i=>i.carts)
+  user: User;
+
+  @OneToOne(()=>Product, i=>i.id)
+  @JoinColumn()
+  product: Product;
+
+  @BeforeInsert()
+  setCreatedAt() {
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+  }
+  @BeforeUpdate()
+  setUpdatedAt() {
+    this.updatedAt = new Date();
+  }
 
 }

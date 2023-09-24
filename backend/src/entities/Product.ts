@@ -6,7 +6,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(()=>Image, i=>i.productId)
+  @OneToMany(()=>Image, i=>i.product)
   imgs: Image[];
 
   @OneToOne(()=>Image, i=>i.id)

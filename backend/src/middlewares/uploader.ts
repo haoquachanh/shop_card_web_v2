@@ -1,4 +1,5 @@
-import {v2 as cloudinary} from 'cloudinary';
+import { NextFunction, Request, Response } from 'express';
+import { v2 as cloudinary } from 'cloudinary';
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
           
@@ -13,8 +14,11 @@ const storage = new CloudinaryStorage({
     cloudinary,
     allowedFormats: ['jpg', 'png'],
     params: {
-        folder: 'Yugioh'
+        folder: 'Lenticular'
     }
 });
 
 const uploadCloud = multer({ storage });
+
+export const uploadImage =  uploadCloud.single('image')
+export const uploadImages= uploadCloud.array('images')

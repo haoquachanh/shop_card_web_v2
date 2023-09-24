@@ -8,28 +8,42 @@ GET http://localhost:3001/api/cart
 GET http://localhost:3001/api/cart/44
 
 ###
-DELETE http://localhost:3001/api/cart/44
+DELETE http://localhost:3001/api/cart/45
 
+###
+# Trong cart thì không có data nên bỏ cái cartitem dô này luôn :>
+# Sẽ có cái route riêng nào đó để thêm, sửa, xóa cart item.
 ###
 POST http://localhost:3001/api/cart
 Content-Type: application/json
 
 {
-    "cart": "cart1234",
-    "answer": "password",
-    "img": "http"
+    "name": "Card C3lít",
+    "sides": "1 mặt",
+    "price": "5000",
+    "img_src": "http://",
+    "isDesigned": "Chưa",
+    "quantity": 40,
+    "material": "Giấy C300",
+    "effect": "nhám",
+    "size": "3x4",
+    "productId": 100002
 }
-
-
 ###
 
 ###
-PUT http://localhost:3001/api/cart/8
+PUT http://localhost:3001/api/cart/48
 Content-Type: application/json
 
 {
-    "text": "Nhi Đã Thay Đổi",
-    "status": "VinhYeuNhi@example.com",
-    "index": 2
+    "name": "Card 00000000000000",
+    "sides": "1 mặt",
+    "price": "5000",
+    "img_src": "http://",
+    "isDesigned": "Chưa",
+    "quantity": 40,
+    "material": "Giấy C300",
+    "effect": "nhám",
+    "size": "3x4"
 }
 
