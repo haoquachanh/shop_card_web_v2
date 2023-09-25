@@ -9,8 +9,10 @@ class ProductController {
     async getAll(req: Request, res: Response) {
     try {
         const theRepository = dataSource.getRepository(Product);
+        const only = req.query.only
         const page = parseInt(req.query.page as string) || 1;
         const pageSize = parseInt(req.query.pageSize as string) || 10;
+        const filter = req.query.filter as string; // Tham số để lọc theo loại
         const sortParam = req.query.sort as string; // Tham số để sắp xếp
         const searchKeyword = req.query.search as string;
         const skip = (page - 1) * pageSize;
@@ -21,6 +23,13 @@ class ProductController {
             .skip(skip)
             .take(pageSize)
         
+        if (only)
+            queryBuilder.select(`products.${only}`)
+        
+        if (filter) {
+            const [field,value] = filter.split(':')
+            queryBuilder.where(`products.${field} = :value`, {value})
+            }
 
         if (sortParam){
             const [field, order] = sortParam.split(':');
@@ -29,7 +38,19 @@ class ProductController {
 
         if (searchKeyword) {
             queryBuilder.andWhere(new Brackets(qb => {
-            qb.where('LOWER(products.text) LIKE LOWER(:searchKeyword)', {
+            qb.where('LOWER(products.category) LIKE LOWER(:searchKeyword)', {
+                searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+            });
+            qb.where('LOWER(products.name) LIKE LOWER(:searchKeyword)', {
+                searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+            });
+            qb.where('LOWER(products.effect) LIKE LOWER(:searchKeyword)', {
+                searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+            });
+            qb.where('LOWER(products.material) LIKE LOWER(:searchKeyword)', {
+                searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+            });
+            qb.where('LOWER(products.cut) LIKE LOWER(:searchKeyword)', {
                 searchKeyword: `%${searchKeyword.toLowerCase()}%`,
             });
             }));

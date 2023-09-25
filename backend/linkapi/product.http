@@ -2,7 +2,7 @@ GET http://localhost:3001/routes-list
 
 
 ###
-GET http://localhost:3001/api/product
+GET http://localhost:3001/api/product?page=2&only=category
 
 ###
 GET http://localhost:3001/api/product/100002
@@ -44,7 +44,6 @@ PUT http://localhost:3001/api/product/2
 Content-Type: application/json
 
 {
-    "status": "hidden",
-    "size": "6x9"
+    "category": "Card thấu kính"
 }
 

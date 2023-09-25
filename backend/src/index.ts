@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import cors from 'cors'
 import express from 'express';
 import router from './routes';
 import { print } from './controllers/getActiveRoute';
@@ -7,6 +8,13 @@ import bodyParser from 'body-parser';
 const multer = require('multer');
 const app = express(); 
 const port = process.env.PORT || 3001;
+
+const allowedOrigins = [process.env.CLIENT_URL, process.env.HOST_URL, process.env.HOST_URL2, process.env.MANAGER_URL, process.env.MAIN_URL];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
