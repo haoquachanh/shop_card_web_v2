@@ -11,6 +11,10 @@ export class Image {
   product: Product;
 
   @OneToOne(()=> ImageSlider, i=>i.img, {onDelete: 'CASCADE'})
+
+  @OneToOne(()=> Product, i=>i.avt,  {onDelete: 'CASCADE'})
+
+  @OneToOne(()=> Product, i=>i.avt_hover,  {onDelete: 'CASCADE'})
   
 
   @Column()

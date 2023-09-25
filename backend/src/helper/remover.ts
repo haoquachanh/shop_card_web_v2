@@ -8,7 +8,7 @@ cloudinary.config({
   });
 
 export default function RemoveImage(url:string){
-    const parts = url.split('/');
+    const parts:string[] = url.split('/');
     const fileNameWithExtension = parts[parts.length - 1];
     const publicId = fileNameWithExtension.split('.')[0];
     let publicIds:string[]=[];

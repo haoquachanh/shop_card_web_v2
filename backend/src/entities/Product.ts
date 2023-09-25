@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column,OneToMany, OneToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn,JoinColumn, Column,OneToMany, OneToOne, ManyToMany, JoinTable, BeforeInsert,BeforeUpdate } from 'typeorm';
 import { Image } from './Image';
 
 @Entity("products")
@@ -9,10 +9,12 @@ export class Product {
   @OneToMany(()=>Image, i=>i.product)
   imgs: Image[];
 
-  @OneToOne(()=>Image, i=>i.id)
+  @OneToOne(()=>Image, i=>i.id,)
+  @JoinColumn()
   avt: Image;
 
   @OneToOne(()=>Image, i=>i.id)
+  @JoinColumn()
   avt_hover: Image;
 
   @Column()
@@ -52,4 +54,14 @@ export class Product {
   createdAt: Date;
   @Column()
   updatedAt: Date;
+
+  @BeforeInsert()
+  initInsert(){
+    this.createdAt=new Date();
+    this.updatedAt=new Date();
+  }
+  @BeforeUpdate()
+  initUpdate(){
+    this.updatedAt=new Date();
+  }
 }

@@ -9,6 +9,7 @@ import hotproductRouter from './hotProduct';
 import cartRouter from './cart';
 import imagesliderRouter from './imageslider';
 import uploadimageRouter from './uploadimage';
+import productRouter from './product';
 const router = Router();
 
 router.use('/auth', authRouter); 
@@ -20,6 +21,7 @@ router.use('/pricelist', pricelistRouter);
 router.use('/hotproduct', hotproductRouter); 
 router.use('/imageslider', imagesliderRouter ); 
 router.use('/cart', cartRouter); 
+router.use('/product', productRouter); 
 router.use('/image', uploadimageRouter); 
 
 export default router;

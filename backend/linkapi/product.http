@@ -1,0 +1,50 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/product
+
+###
+GET http://localhost:3001/api/product/100002
+
+###
+DELETE http://localhost:3001/api/product/7
+
+###
+POST http://localhost:3001/api/product
+Content-Type: application/json
+
+{
+    "id": 100002,
+    "video": "image1.jpg",
+    "name": "Card nhựa PVC",
+    "name2": "Đáp ứng mọi số lượng",
+    "color": "Nhiều màu",
+    "colorsys": "CMYK",
+    "sides": "1 mặt, 2 mặt",
+    "seen": 10,
+    "price": 19,
+    "pritech": "In KTS",
+    "cut": "Theo khuôn chuẩn",
+    "time": "5 days",
+    "category": "Card bo góc",
+    "material": "Nhựa",
+    "effect": "Bóng, Nhám, Kim tuyến, Hologram",
+    "size": "5.4x8.6, Theo yêu cầu",
+    "status": "release",
+    "createdAt": "2023-08-01T00:00:00.000Z",
+    "updatedAt": "2023-06-06T20:48:35.000Z"
+}
+
+
+###
+
+###   Hàm sửa sẽ vẫn hoạt động nhưng không hoạt động với ảnh.
+PUT http://localhost:3001/api/product/2
+Content-Type: application/json
+
+{
+    "status": "hidden",
+    "size": "6x9"
+}
+

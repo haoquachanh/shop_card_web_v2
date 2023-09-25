@@ -21,4 +21,8 @@ const storage = new CloudinaryStorage({
 const uploadCloud = multer({ storage });
 
 export const uploadImage =  uploadCloud.single('image')
+export const uploadAvtAvthover=  uploadCloud.fields([
+  { name: 'avt', maxCount: 1 },
+  { name: 'avt_hover', maxCount: 1 },
+])
 export const uploadImages= uploadCloud.array('images')
