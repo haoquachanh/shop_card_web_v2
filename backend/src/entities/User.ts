@@ -5,6 +5,7 @@
   import {Exclude} from "class-transformer"
   import * as bcrypt from "bcryptjs";
 import { Cart } from './Cart';
+import { Order } from './Order';
 
   @Entity("users")
   export class User {
@@ -46,6 +47,10 @@ import { Cart } from './Cart';
     @OneToMany(() => Cart, i => i.user)
     @JoinColumn()
     carts: Cart[];
+ 
+    @OneToMany(() => Cart, i => i.user)
+    @JoinColumn()
+    orders: Order[];
 
     // function
     @BeforeInsert()

@@ -10,8 +10,8 @@ class ProductController {
     try {
         const theRepository = dataSource.getRepository(Product);
         const only = req.query.only
-        const page = parseInt(req.query.page as string) || 1;
-        const pageSize = parseInt(req.query.pageSize as string) || 10;
+        const page = parseInt(req.query.page as string);
+        const pageSize = parseInt(req.query.pageSize as string);
         const filter = req.query.filter as string; // Tham số để lọc theo loại
         const sortParam = req.query.sort as string; // Tham số để sắp xếp
         const searchKeyword = req.query.search as string;
@@ -20,6 +20,13 @@ class ProductController {
         console.log(page, pageSize, skip, sortParam)
         const queryBuilder = await theRepository
             .createQueryBuilder('products')
+            .leftJoin('products.avt', 'avt')
+            .leftJoin('products.avt_hover', 'avt_hover')
+            .addSelect('avt.imgSrc')
+            .addSelect('avt_hover.imgSrc')
+            
+        if (page && pageSize)
+            queryBuilder
             .skip(skip)
             .take(pageSize)
         
@@ -64,18 +71,26 @@ class ProductController {
             mes: "No have any textproduct"
         })
 
-        let pageNum=Math.ceil(count/pageSize)
-        if (page>pageNum) return res.status(404).json({
-            err: 1,
-            mes: "Page not found"
-        })
-
+        
+        if (page && pageSize)
+        {
+            let pageNum=Math.ceil(count/pageSize)
+            if (page>pageNum) return res.status(404).json({
+                err: 1,
+                mes: "Page not found"
+            })
+            res.status(200).json({
+                err: 0,
+                mes: `Got ${count} products.`,
+                pageSize: pageSize,
+                pageNum: pageNum,
+                page: page,
+                data: products
+            })
+        }
         res.status(200).json({
             err: 0,
             mes: `Got ${count} products.`,
-            pageSize: pageSize,
-            pageNum: pageNum,
-            page: page,
             data: products
         })
         }

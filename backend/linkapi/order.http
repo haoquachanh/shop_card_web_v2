@@ -1,0 +1,70 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/order
+
+###
+GET http://localhost:3001/api/order/7
+
+###
+DELETE http://localhost:3001/api/order/45
+
+###
+# Trong order thì không có data nên bỏ cái orderitem dô này luôn :>
+# Sẽ có cái route riêng nào đó để thêm, sửa, xóa order item.
+###
+POST http://localhost:3001/api/order
+Content-Type: application/json
+
+{
+    "nameReceive": "Vinh0Gay",
+    "address": "ktx khu A",
+    "phone": "0011223344",
+    "status": "pending",
+    "createdAt": "2023-08-26T09:28:37.421Z",
+    "updatedAt": "2023-08-26T09:28:37.421Z",
+    "items": [
+      {
+        "img_src": "http://localhost:3001/images/",
+        "product": 100008,
+        "sides": 1,
+        "isDesigned": "Chưa",
+        "price": null,
+        "quantity": 30,
+        "material": "gỗ",
+        "effect": "nhám",
+        "size": "3x4"
+      },
+      {
+        "img_src": "http://localhost:3001/images/",
+        "product": 100009,
+        "name": "Card C300",
+        "sides": 0,
+        "isDesigned": "Chưa",
+        "price": null,
+        "quantity": 30,
+        "material": null,
+        "effect": "nhám",
+        "size": "3x4"
+      }
+    ]
+}
+###
+
+###
+PUT http://localhost:3001/api/order/48
+Content-Type: application/json
+
+{
+    "name": "Card 00000000000000",
+    "sides": "1 mặt",
+    "price": "5000",
+    "img_src": "http://",
+    "isDesigned": "Chưa",
+    "quantity": 40,
+    "material": "Giấy C300",
+    "effect": "nhám",
+    "size": "3x4"
+}
+
