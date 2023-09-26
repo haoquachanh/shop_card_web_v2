@@ -8,16 +8,25 @@ class HotProductController {
     async getAll(req: Request, res: Response) {
     try {
         const theRepository = dataSource.getRepository(HotProduct);
-        const page = parseInt(req.query.page as string) || 1;
-        const pageSize = parseInt(req.query.pageSize as string) || 10;
         const sortParam = req.query.sort as string; // Tham số để sắp xếp
         const searchKeyword = req.query.search as string;
-        const skip = (page - 1) * pageSize;
     
         const queryBuilder = await theRepository
             .createQueryBuilder('hotProduct')
-            .skip(skip)
-            .take(pageSize)
+            .leftJoin('hotProduct.product', 'product')
+            .addSelect([
+                'product.name',
+                'product.id',
+                'product.avt',
+                'product.avt_hover'
+            ])
+            .leftJoin('product.avt', 'avt') // Kết nối đến avt của Product
+            .addSelect(['avt.imgSrc'])
+            .leftJoin('product.avt_hover', 'avt_hover') // Kết nối đến avt của Product
+            .addSelect(['avt_hover.imgSrc'])
+            // .leftJoinAndSelect('product.avt_hover', 'avt_hover.imgSrc');
+            // .addSelect(['avt_hover.imgSrc'])
+            
         
 
         if (sortParam){
@@ -33,18 +42,10 @@ class HotProductController {
             mes: "No have any hot products"
         })
 
-        let pageNum=Math.ceil(count/pageSize)
-        if (page>pageNum) return res.status(404).json({
-            err: 1,
-            mes: "Page not found"
-        })
 
         res.status(200).json({
             err: 0,
             mes: `Got ${count} hotProduct.`,
-            pageSize: pageSize,
-            pageNum: pageNum,
-            page: page,
             data: users
         })
         }

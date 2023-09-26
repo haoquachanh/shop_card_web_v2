@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import CartController from '../controllers/cart';
+import { verifyJWT } from '../middlewares/verifyJWT';
 
 const cartRouter = Router();
 const cartController = new CartController();
 
-
+cartRouter.use(verifyJWT)
 cartRouter.get('/', cartController.getAll);
 cartRouter.get('/:id', cartController.get);
 

@@ -15,7 +15,6 @@ POST http://localhost:3001/api/product
 Content-Type: application/json
 
 {
-    "id": 100002,
     "video": "image1.jpg",
     "name": "Card nhựa PVC",
     "name2": "Đáp ứng mọi số lượng",

@@ -25,7 +25,7 @@ export class Order {
   @ManyToOne(()=>User,i=>i.orders)
   user: User;
 
-  @OneToMany(()=>OrderItem, i=>i.order)
+  @OneToMany(()=>OrderItem, (i)=>i.order, {'onDelete': 'CASCADE'})
   @JoinColumn()
   items: OrderItem[];
 

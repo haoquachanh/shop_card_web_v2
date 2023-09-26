@@ -8,7 +8,10 @@ GET http://localhost:3001/api/order
 GET http://localhost:3001/api/order/7
 
 ###
-DELETE http://localhost:3001/api/order/45
+DELETE http://localhost:3001/api/order/38
+
+###
+DELETE http://localhost:3001/api/order/item/46
 
 ###
 # Trong order thì không có data nên bỏ cái orderitem dô này luôn :>
@@ -38,7 +41,7 @@ Content-Type: application/json
       },
       {
         "img_src": "http://localhost:3001/images/",
-        "product": 100009,
+        "product": 100001,
         "name": "Card C300",
         "sides": 0,
         "isDesigned": "Chưa",
@@ -66,5 +69,14 @@ Content-Type: application/json
     "material": "Giấy C300",
     "effect": "nhám",
     "size": "3x4"
+}
+
+
+###
+PUT http://localhost:3001/api/order/item/45
+Content-Type: application/json
+
+{
+  "material": "Giấy xịn"
 }
 

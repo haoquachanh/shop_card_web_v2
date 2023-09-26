@@ -34,8 +34,11 @@ class ProductController {
             queryBuilder.select(`products.${only}`)
         
         if (filter) {
-            const [field,value] = filter.split(':')
-            queryBuilder.where(`products.${field} = :value`, {value})
+            let filters = filter.split(',') 
+            filters.forEach((i)=>{
+                const [field,value] = i.split(':')
+                queryBuilder.where(`products.${field} = :value`, {value})
+            })
             }
 
         if (sortParam){
@@ -108,7 +111,11 @@ class ProductController {
             }) 
 
             const theRepository = dataSource.getRepository(Product);
-            let product= await theRepository.findOne({where: {id:id}})            
+            let product= await theRepository.findOne({where: {id:id}})   
+            console.log(product)
+            product.seen++
+            console.log(">>>",product)
+            await theRepository.save(product)
             if (!product) return res.status(404).json({
                 err: 1,
                 mes: "Product not found"
@@ -131,31 +138,33 @@ class ProductController {
         let price = parseInt(req.body.price)
         let seen = parseInt(req.body.seen)
         // if (!(status&)) return res.status(400).json({
-        if (!(status&&video&&name&&name2&&color&&colorsys&&sides&&size&&seen&&price&&pritech&&cut&&time&&category&&material&&effect&&req.files)) return res.status(400).json({
-            err: 1,
-            mes: "Missing required parameter"
-        }) 
+
+        //price is non required
+        // if (!(status&&video&&name&&name2&&color&&colorsys&&sides&&size&&seen&&pritech&&cut&&time&&category&&material&&effect&&req.files)) return res.status(400).json({
+        //     err: 1,
+        //     mes: "Missing required parameter"
+        // }) 
 
         const theRepository = dataSource.getRepository(Product);
         let newProduct = new Product()
         
-        newProduct.category = category
-        newProduct.status = status
-        newProduct.video = video
-        newProduct.name = name
-        newProduct.name2 = name2
-        newProduct.color = color
-        newProduct.colorsys = colorsys
-        newProduct.sides = sides
-        newProduct.size = size
-        newProduct.pritech = pritech
-        newProduct.cut = cut
-        newProduct.time = time
-        newProduct.category = category
-        newProduct.material = material
-        newProduct.effect = effect
-        newProduct.seen = parseInt(req.body.seen)
-        newProduct.price = parseInt(req.body.price)
+        if (category) newProduct.category = category
+        if (status) newProduct.status = status
+        if (video) newProduct.video = video
+        if (name) newProduct.name = name
+        if (name2) newProduct.name2 = name2
+        if (color) newProduct.color = color
+        if (colorsys) newProduct.colorsys = colorsys
+        if (sides) newProduct.sides = sides
+        if (size) newProduct.size = size
+        if (pritech) newProduct.pritech = pritech
+        if (cut) newProduct.cut = cut
+        if (time) newProduct.time = time
+        if (category) newProduct.category = category
+        if (material) newProduct.material = material
+        if (effect) newProduct.effect = effect
+        if (seen) newProduct.seen = parseInt(req.body.seen)
+        // newProduct.price = req.body.price
 
         newProduct.createdAt = new Date()
         newProduct.updatedAt = new Date()

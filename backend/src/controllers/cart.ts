@@ -8,31 +8,32 @@ import { User } from '../entities/User';
 class CartController {
     async getAll(req: Request, res: Response) {
     try {
+        let userId= res.locals.jwtPayload.userId
         const theRepository = dataSource.getRepository(Cart);
         const page = parseInt(req.query.page as string) || 1;
-        const pageSize = parseInt(req.query.pageSize as string) || 10;
+        const pageSize = parseInt(req.query.pageSize as string) || 20;
         const sortParam = req.query.sort as string; // Tham số để sắp xếp
         const searchKeyword = req.query.search as string;
         const skip = (page - 1) * pageSize;
     
-        console.log(page, pageSize, skip, sortParam)
         const queryBuilder = await theRepository
-            .createQueryBuilder('pricelists')
+            .createQueryBuilder('carts')
+            .where("carts.userId = :userId", {userId: userId})
             .skip(skip)
             .take(pageSize)
         
 
         if (sortParam){
             const [field, order] = sortParam.split(':');
-            queryBuilder.orderBy(`pricelists.${field}`, order as 'ASC' | 'DESC');
+            queryBuilder.orderBy(`carts.${field}`, order as 'ASC' | 'DESC');
         }
 
         if (searchKeyword) {
             queryBuilder.andWhere(new Brackets(qb => {
-            qb.where('LOWER(pricelists.question) LIKE LOWER(:searchKeyword)', {
+            qb.where('LOWER(carts.question) LIKE LOWER(:searchKeyword)', {
                 searchKeyword: `%${searchKeyword.toLowerCase()}%`,
             });
-            qb.orWhere('LOWER(pricelists.answer) LIKE LOWER(:searchKeyword)', {
+            qb.orWhere('LOWER(carts.answer) LIKE LOWER(:searchKeyword)', {
                 searchKeyword: `%${searchKeyword.toLowerCase()}%`,
             });
             }));
@@ -55,7 +56,7 @@ class CartController {
 
         res.status(200).json({
             err: 0,
-            mes: `Got ${count} pricelists.`,
+            mes: `Got ${count} carts.`,
             pageSize: pageSize,
             pageNum: pageNum,
             page: page,
@@ -63,12 +64,14 @@ class CartController {
         })
         }
         catch (error) {
+            console.log(error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }
 
     async get(req: Request, res: Response) {
         try {
+            let userId= res.locals.jwtPayload.userId
             let id = parseInt(req.params.id)
             if (!id) return res.status(400).json({
                 err: 1,
@@ -76,16 +79,16 @@ class CartController {
             }) 
 
             const theRepository = dataSource.getRepository(Cart);
-            let pricelist= await theRepository.findOne({where: {id:id}})            
-            if (!pricelist) return res.status(404).json({
+            let item= await theRepository.findOne({where: {id:id }})  
+            if (!item) return res.status(404).json({
                 err: 1,
-                mes: "Price not found"
+                mes: "Cart item not found"
             })
 
             res.status(200).json({
             err: 0,
-            mes: "Got pricelist",
-            data: pricelist
+            mes: "Got cart item",
+            data: item
             })
         } 
         catch (error) {
