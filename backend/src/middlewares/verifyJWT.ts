@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import 'dotenv/config';
 
 export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
-  const token = <string>req.headers["Authorization"];
+  const token = <string>req.headers.authorization;
   let jwtPayload;
   if (!token) {
     return res.status(400).json({ error: "Missing JWT token" });
