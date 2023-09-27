@@ -14,16 +14,17 @@ import orderRouter from './order';
 const router = Router();
 
 router.use('/auth', authRouter); 
-router.use('/user', userRouter); 
-router.use('/slider', textsliderRouter); 
+router.use('/pricelist', pricelistRouter); 
 router.use('/question', questionRouter); 
 router.use('/contact', contactRouter); 
-router.use('/pricelist', pricelistRouter); 
 router.use('/hotproduct', hotproductRouter); 
+router.use('/product', productRouter); 
+router.use('/slider', textsliderRouter); 
 router.use('/imageslider', imagesliderRouter ); 
+
+router.use('/image', uploadimageRouter); 
+router.use('/user', userRouter); 
 router.use('/cart', cartRouter); 
 router.use('/order', orderRouter); 
-router.use('/product', productRouter); 
-router.use('/image', uploadimageRouter); 
 
 export default router;
