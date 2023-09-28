@@ -5,6 +5,7 @@ import 'dotenv/config'
 
 import { dataSource } from '../datasource';
 import { User } from '../entities/User';
+import { Image } from '../entities/Image';
 
 
 class AuthController {
@@ -67,13 +68,13 @@ class AuthController {
     let user: User;
     try {
       user = await userRepository.findOneOrFail(id);
-    } catch (id) {
-      res.status(401).send();
+    } catch (error) {
+      return res.status(401).json({err:1, mes: "Not exist"});
     }
 
     //Check if old password matchs
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      res.status(401).send();
+      res.status(401).json({err:1, mes: "Password is matches with old password"});
       return;
     }
 
@@ -89,8 +90,45 @@ class AuthController {
 
     res.status(204).send();
   };
-}
 
- 
+  async loginByOrtherway(req: Request, res: Response){
+    let email=req.user.emails[0].value
+    let fullname=req.user.displayName
+    let img = new Image();
+    img.imgSrc= req.user.photos[0].value
+    img = await dataSource.getRepository(Image).save(img);
+
+    const userRepository = dataSource.getRepository(User);
+      let user:User;
+    user = await userRepository.findOne({ where: { email } });
+    
+    let id = user?.id
+    if (!user) {
+      user = new User("none",fullname,email);
+      user.avt=img
+      console.log(">>>user0: ",user);
+      try {
+        let newUser = await userRepository.save(user);
+        id = newUser.id;
+      } catch (error) {
+        console.log(">>>error: ", error);
+      }
+    }
+    console.log(">>>user1: ",id);
+    
+    // console.log(">>>user2: ",newUser);
+    
+    const token = jwt.sign(
+      { id: id},
+      process.env.JWT_SECRET,
+      { expiresIn: 90 }
+    );
+
+
+    // res.status(200).json({err:0, mes: "Loggin Success", token: token})
+    res.redirect(`${process.env.CLIENT_URL}/?tokenID=${token}`)
+  }
+  
+}
 
 export default AuthController;

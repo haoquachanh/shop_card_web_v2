@@ -13,7 +13,6 @@ import { Order } from './Order';
     id: number;
 
     @Column()
-    @Length(4.100)
     @Exclude()
     password: string;
 
@@ -57,12 +56,12 @@ import { Order } from './Order';
     setCreatedAt() {
       this.createdAt = new Date();
       this.updatedAt = new Date();
-      this.password = bcrypt.hashSync(this.password,7);
+      this.password = this.password!=='g' ? bcrypt.hashSync(this.password,7) : "none";
     }
     @BeforeUpdate()
     setUpdatedAt() {
       this.updatedAt = new Date();
-      this.password = bcrypt.hashSync(this.password,7);
+      this.password = this.password!=='none' ? bcrypt.hashSync(this.password,7) : "none";
     }
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {

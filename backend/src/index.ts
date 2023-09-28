@@ -4,7 +4,7 @@ import express from 'express';
 import router from './routes';
 import { print } from './controllers/getActiveRoute';
 import { renderRoutesList } from './config/routes-list';
-import bodyParser from 'body-parser';
+import { checkOrigin } from './middlewares/checkOrigins';
 const multer = require('multer');
 const app = express(); 
 const port = process.env.PORT || 3001;
@@ -23,9 +23,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
 
+// app.use(checkOrigin)
 app.use('/api', router)
 
 app.get('/routes-list',(req,res)=>{

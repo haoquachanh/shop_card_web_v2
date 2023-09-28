@@ -11,19 +11,23 @@ import imagesliderRouter from './imageslider';
 import uploadimageRouter from './uploadimage';
 import productRouter from './product';
 import orderRouter from './order';
+import { verifyJWT } from '../middlewares/verifyJWT';
 const router = Router();
 
+//free
 router.use('/auth', authRouter); 
 router.use('/pricelist', pricelistRouter); 
 router.use('/question', questionRouter); 
 router.use('/contact', contactRouter); 
 router.use('/hotproduct', hotproductRouter); 
-router.use('/product', productRouter); 
 router.use('/slider', textsliderRouter); 
 router.use('/imageslider', imagesliderRouter ); 
-
-router.use('/image', uploadimageRouter); 
+router.use('/product', productRouter); 
 router.use('/user', userRouter); 
+
+//need login
+router.use(verifyJWT)
+router.use('/image', uploadimageRouter); 
 router.use('/cart', cartRouter); 
 router.use('/order', orderRouter); 
 

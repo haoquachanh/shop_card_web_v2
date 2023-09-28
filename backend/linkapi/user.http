@@ -18,7 +18,7 @@ Content-Type: application/json
     "username": "user1234",
     "password": "password",
     "fullname": "User Full Name",
-    "email": "VinhYeuNhiMaimaii@example.com",
+    "email": "quanlyweb.cardshop@example.com",
     "avt": "https://example.avt.com"
 }
 
