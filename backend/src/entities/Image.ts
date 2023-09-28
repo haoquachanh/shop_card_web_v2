@@ -1,11 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,OneToOne } from 'typeorm';
 import { Product } from './Product';
 import { ImageSlider } from './ImageSlider';
+import { User } from './User';
 
 @Entity("images")
 export class Image {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToOne(()=>User,i=>i.avt)
   
   @ManyToOne(()=>Product, i=>i.imgs )
   product: Product;

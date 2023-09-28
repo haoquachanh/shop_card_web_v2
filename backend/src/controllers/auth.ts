@@ -92,6 +92,7 @@ class AuthController {
   };
 
   async loginByOrtherway(req: Request, res: Response){
+    //get the user information
     let email=req.user.emails[0].value
     let fullname=req.user.displayName
     let img = new Image();
@@ -106,29 +107,57 @@ class AuthController {
     if (!user) {
       user = new User("none",fullname,email);
       user.avt=img
-      console.log(">>>user0: ",user);
       try {
         let newUser = await userRepository.save(user);
         id = newUser.id;
       } catch (error) {
         console.log(">>>error: ", error);
+        return res.status(500).json({err:-1, mes: "Iternal Error"})
       }
     }
-    console.log(">>>user1: ",id);
-    
-    // console.log(">>>user2: ",newUser);
     
     const token = jwt.sign(
       { id: id},
       process.env.JWT_SECRET,
       { expiresIn: 90 }
     );
-
-
     // res.status(200).json({err:0, mes: "Loggin Success", token: token})
     res.redirect(`${process.env.CLIENT_URL}/?tokenID=${token}`)
   }
-  
+
+  async loginWithGGTOKEN(req: Request, res: Response) {
+    const tokenID = req.body.tokenID;
+    if (!tokenID) {
+      res.status(400).json({err:1, mes: "missing token"});
+    }
+
+    let jwtPayload
+    try {
+      jwtPayload = <any>jwt.verify(tokenID, process.env.JWT_SECRET);
+    } catch (error) {
+      //If token is not valid, respond with 401 (unauthorized)
+      return res.status(401).send({
+        err: 1,
+        mes: error.message
+      });
+    }
+
+      const user = await dataSource.getRepository(User).findOne({ where: { id:jwtPayload.id } });
+      if(!user) {
+        return res.status(404).json({err: 1, mes: "User not found"})
+      }
+      let token = jwt.sign(
+        { userId: user.id, email: user.email , fullname: user.fullname},
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      return res.status(200).json({
+        err: 0,
+        mes: "Login successful",
+        token: token
+      });
+    }
 }
 
 export default AuthController;

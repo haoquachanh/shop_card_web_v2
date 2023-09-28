@@ -36,6 +36,7 @@ import { Order } from './Order';
     phone: string;
 
     @OneToOne(()=>Image, i=>i.id)
+    @JoinColumn()
     avt: Image;
 
     @ManyToOne(() => Role, role => role.users)

@@ -14,7 +14,8 @@ authRouter.post('/changePassword', authController.changePassword)
 
 
 authRouter.get('/google', passport.authenticate('google', {scope: ['profile','email'], session: false}) );
-
 authRouter.get('/google/callback', passport.authenticate('google',{session: false}) ,authController.loginByOrtherway)
+authRouter.post('/google/token',authController.loginWithGGTOKEN)
+
 
 export default authRouter;
