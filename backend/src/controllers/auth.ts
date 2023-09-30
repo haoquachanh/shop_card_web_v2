@@ -125,7 +125,7 @@ class AuthController {
     res.redirect(`${process.env.CLIENT_URL}/?tokenID=${token}`)
   }
 
-  async loginWithGGTOKEN(req: Request, res: Response) {
+  async loginWithTokenID(req: Request, res: Response) {
     const tokenID = req.body.tokenID;
     if (!tokenID) {
       res.status(400).json({err:1, mes: "missing token"});
