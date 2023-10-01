@@ -9,7 +9,7 @@ import 'dotenv/config';
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: [__dirname + '/entities/*.ts'],
     migrations: [__dirname + '/migrations/*.ts'],
     subscribers: [__dirname + '/subscribers/**/*.ts'],
