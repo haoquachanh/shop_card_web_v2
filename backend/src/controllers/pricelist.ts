@@ -18,6 +18,8 @@ class PriceListController {
         console.log(page, pageSize, skip, sortParam)
         const queryBuilder = await theRepository
             .createQueryBuilder('pricelists')
+            .leftJoin('pricelists.product','product')
+            .addSelect('product.id')
             .skip(skip)
             .take(pageSize)
         
