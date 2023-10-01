@@ -22,6 +22,8 @@ class ProductController {
             .createQueryBuilder('products')
             .leftJoin('products.avt', 'avt')
             .leftJoin('products.avt_hover', 'avt_hover')
+            .leftJoin('products.imgs', 'imgs')
+            .addSelect('imgs.imgSrc')
             .addSelect('avt.imgSrc')
             .addSelect('avt_hover.imgSrc')
             
@@ -111,7 +113,15 @@ class ProductController {
             }) 
 
             const theRepository = dataSource.getRepository(Product);
-            let product= await theRepository.findOne({where: {id:id}})   
+            let product= await theRepository
+                .createQueryBuilder('products')
+                .leftJoin('products.avt', 'avt')
+                .leftJoin('products.avt_hover', 'avt_hover')
+                .leftJoin('products.imgs', 'imgs')
+                .addSelect('imgs.imgSrc')
+                .addSelect('avt.imgSrc')
+                .addSelect('avt_hover.imgSrc')  
+                .getOne();
             console.log(product)
             product.seen++
             console.log(">>>",product)
