@@ -2,5 +2,7 @@ node_modules/
 /package-lock.json
 /.env
 /ormconfig.json
-/dist
+# /dist
 note.md
+linkapi/
+src/

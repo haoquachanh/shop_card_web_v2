@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_1 = __importDefault(require("../controllers/auth"));
+const passport_1 = __importDefault(require("../passport"));
+const authRouter = (0, express_1.Router)();
+const authController = new auth_1.default();
+// authRouter.use(passport.initialize());
+// authRouter.use(passport.session());
+authRouter.post('/login', authController.loginByAccount);
+authRouter.post('/changePassword', authController.changePassword);
+authRouter.get('/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'], session: false }));
+authRouter.get('/google/callback', passport_1.default.authenticate('google', { session: false }), authController.loginByOrtherway);
+authRouter.get('/facebook', passport_1.default.authenticate('facebook', { scope: ['profile', 'email'], session: false }));
+authRouter.get('/facebook/callback', passport_1.default.authenticate('facebook', { session: false }), authController.loginByOrtherway);
+authRouter.post('/loginwithtoken/token', authController.loginWithTokenID);
+exports.default = authRouter;
