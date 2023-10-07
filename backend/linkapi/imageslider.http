@@ -5,7 +5,7 @@ GET http://localhost:3001/routes-list
 GET http://localhost:3001/api/imageslider
 
 ###
-GET http://localhost:3001/api/imageslider/2
+GET http://localhost:3001/api/imageslider/22
 
 ###
 DELETE http://localhost:3001/api/imageslider/19

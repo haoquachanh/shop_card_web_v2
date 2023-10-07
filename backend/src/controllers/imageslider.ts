@@ -20,6 +20,8 @@ class ImageSliderController {
             .createQueryBuilder('imageSlider')
             .leftJoin('imageSlider.img', 'img')
             .addSelect(['img.imgSrc'])
+            .leftJoin('imageSlider.product', 'product')
+            .addSelect(['product.id'])
             .skip(skip)
             .take(pageSize)
         

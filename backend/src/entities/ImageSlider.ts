@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn,OneToOne } from 'typeorm';
-// import { Product } from './Product';
+import { Product } from './Product';
 import { Image } from './Image';
 
 @Entity("imageSlider")
@@ -10,9 +10,10 @@ export class ImageSlider {
   @OneToOne(()=>Image, i=>i.id, {onDelete: 'CASCADE'})
   @JoinColumn()
   img: Image
-
-  // @OneToOne(()=>Product)
-  // product: Product;
+  
+  @OneToOne(()=>Product, i=>i.id)
+  @JoinColumn()
+  product: Product;
 
   @Column()
   status: string;
