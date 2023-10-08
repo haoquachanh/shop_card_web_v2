@@ -1,13 +1,11 @@
 import { Router } from 'express';
-// import uploadCloud from '../middlewares/uploader';
-import { uploadImages} from '../middlewares/uploader';
-import { dataSource } from '../datasource';
-import { Image } from '../entities/Image';
-import { Product } from '../entities/Product';
-import uploadImage from '../controllers/uploadImages';
+import { uploadImages } from '../middlewares/uploader';
+import ImagesController from '../controllers/images';
 
 const uploadimageRouter = Router();
+const imagescontroller =  new ImagesController()
 
-uploadimageRouter.post('/', uploadImages, uploadImage)
+uploadimageRouter.post('/', imagescontroller.uploadImage)
+uploadimageRouter.get('/',imagescontroller.temp)
 
 export default uploadimageRouter;

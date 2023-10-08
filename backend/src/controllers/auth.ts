@@ -7,7 +7,6 @@ import { dataSource } from '../datasource';
 import { User } from '../entities/User';
 import { Image } from '../entities/Image';
 
-
 class AuthController {
   async loginByAccount(req: Request, res: Response) {
     try {
