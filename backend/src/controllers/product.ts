@@ -17,7 +17,6 @@ class ProductController {
         const searchKeyword = req.query.search as string;
         const skip = (page - 1) * pageSize;
     
-        console.log(page, pageSize, skip, sortParam)
         const queryBuilder = await theRepository
             .createQueryBuilder('products')
             .leftJoin('products.avt', 'avt')

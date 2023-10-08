@@ -8,6 +8,6 @@ import uploadImage from '../controllers/uploadImages';
 
 const uploadimageRouter = Router();
 
-uploadimageRouter.post('/:id', uploadImages, uploadImage)
+uploadimageRouter.post('/', uploadImages, uploadImage)
 
 export default uploadimageRouter;

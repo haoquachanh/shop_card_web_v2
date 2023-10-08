@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,OneToOne, BeforeInsert, BeforeUpdate} from 'typeorm';
 import { Product } from './Product';
 import { ImageSlider } from './ImageSlider';
 import { User } from './User';
@@ -22,4 +22,19 @@ export class Image {
 
   @Column()
   imgSrc: string;
+
+  @Column()
+  createdAt: Date;
+  @Column()
+  updatedAt: Date;
+
+  @BeforeInsert()
+  initInsert(){
+    this.createdAt=new Date();
+    this.updatedAt=new Date();
+  }
+  @BeforeUpdate()
+  initUpdate(){
+    this.updatedAt=new Date();
+  }
 }

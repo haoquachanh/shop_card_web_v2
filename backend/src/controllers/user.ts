@@ -9,21 +9,27 @@ class UserController {
     try {
       const userRepository = dataSource.getRepository(User);
 
-      const page = parseInt(req.query.page as string) || 1;
-      const pageSize = parseInt(req.query.pageSize as string) || 10;
+      const page = parseInt(req.query.page as string);
+      const pageSize = parseInt(req.query.pageSize as string);
       const roleParam = req.query.roleParam as string; // Tham số để lọc theo loại
       const sortParam = req.query.sort as string; // Tham số để sắp xếp
       const searchKeyword = req.query.search as string;
       const skip = (page - 1) * pageSize;
       
-      console.log(page, pageSize, skip, sortParam)
       const queryBuilder = await userRepository
         .createQueryBuilder('users')
-        .leftJoinAndSelect('users.role', 'role')
+        // .select(['users.id','users.fullname','users.email','users.phone','users.birth','users.createdAt','users.updatedAt'])
+        .leftJoin('users.role', 'role')
+        .addSelect('role.value')
+        .leftJoin('users.avt', 'avt')
+        .addSelect('avt.imgSrc')
+        
+        
+      if (skip&&pageSize) {
+        queryBuilder
         .skip(skip)
         .take(pageSize)
-        
-      
+      }
       if (roleParam) {
         queryBuilder.where('users.role = :roleParam', {roleParam})
       }
@@ -56,19 +62,26 @@ class UserController {
         mes: "No have any users"
     })
 
-
-      let pageNum=Math.ceil(count/pageSize)
-      if (page>pageNum) return res.status(404).json({
-        err: 1,
-        mes: "Page not found"
-      })
+      if (page && pageSize)
+      {
+          let pageNum=Math.ceil(count/pageSize)
+          if (page>pageNum) return res.status(404).json({
+              err: 1,
+              mes: "Page not found"
+          })
+          res.status(200).json({
+              err: 0,
+              mes: `Got ${count} products.`,
+              pageSize: pageSize,
+              pageNum: pageNum,
+              page: page,
+              data: users
+          })
+      }
 
       res.status(200).json({
         err: 0,
         mes: `Got ${count} users.`,
-        pageSize: pageSize,
-        pageNum: pageNum,
-        page: page,
         data: users
       })
     } catch (error) {
@@ -89,6 +102,11 @@ class UserController {
       // Tìm người dùng theo ID
       const user = await userRepository.findOne({ where: { id } });
       
+      if (!user) return res.status(404).json({
+        err: 1,
+        mes: "user not found"
+      });
+
       // if (user) {
       //   await userRepository
       //     .createQueryBuilder('user')

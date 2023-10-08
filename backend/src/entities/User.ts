@@ -12,7 +12,7 @@ import { Order } from './Order';
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({select: false})
     @Exclude()
     password: string;
 
