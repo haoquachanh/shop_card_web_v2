@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,OneToOne } from 'typeorm';
+import { Entity, BeforeInsert, BeforeUpdate, PrimaryGeneratedColumn, Column, ManyToOne,OneToOne } from 'typeorm';
 import { Product } from './Product';
 import { User } from './User';
 import { Image } from './Image';
@@ -14,6 +14,9 @@ export class Comment {
   @OneToOne(()=>Image, i=>i.imgSrc)
   img: Image;
 
+  // @OneToOne(()=>Image, i=>i.imgSrc)
+  // img: Image;
+
   @OneToOne(()=>Product, i=>i.id)
   productId: Product;
 
@@ -21,9 +24,24 @@ export class Comment {
   status: string;
   @Column()
   text: string;
+  @Column()
+  rating: number;
+
 
   @Column()
   createdAt: Date;
   @Column()
   updatedAt: Date;
+  @BeforeInsert()
+  initInsert(){
+    this.status = "pending"; 
+    this.createdAt=new Date();
+    this.updatedAt=new Date();
+  }
+  @BeforeUpdate()
+  initUpdate(){
+    this.updatedAt=new Date();
+  }
+
+
 }
