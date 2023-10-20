@@ -1,0 +1,35 @@
+GET http://localhost:3001/routes-list
+
+
+###
+GET http://localhost:3001/api/comment
+
+###
+GET http://localhost:3001/api/comment
+
+###
+DELETE http://localhost:3001/api/comment/20
+
+###
+POST http://localhost:3001/api/comment
+Content-Type: application/json
+
+{
+    "text": "OK",
+    rating: 5,
+
+}
+
+
+###
+
+###
+PUT http://localhost:3001/api/comment/19
+Content-Type: application/json
+
+{
+    "text": "Nhi Đã Thay Đổi",
+    "status": "VinhYeuNhi@example.com",
+    "index": 2
+}
+

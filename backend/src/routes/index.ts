@@ -8,7 +8,7 @@ import pricelistRouter from './pricelists';
 import hotproductRouter from './hotProduct';
 import cartRouter from './cart';
 import imagesliderRouter from './imageslider';
-import uploadimageRouter from './uploadimage';
+import managerImgRouter from './managerImg';
 import productRouter from './product';
 import commentRouter from './comment';
 import orderRouter from './order';
@@ -26,10 +26,10 @@ router.use('/slider', textsliderRouter);
 router.use('/imageslider', imagesliderRouter ); 
 router.use('/product', productRouter); 
 router.use('/user', userRouter); 
+router.use('/image', managerImgRouter); 
 
 //need login
 router.use(verifyJWT)
-router.use('/image', uploadimageRouter); 
 router.use('/cart', cartRouter); 
 router.use('/order', orderRouter); 
 

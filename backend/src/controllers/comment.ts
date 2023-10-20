@@ -83,6 +83,7 @@ class CommentController {
 
     async create(req: Request, res: Response) {
     try {
+        console.log('Chạy dô đây rồi nè')
         let {text,rating} = req.body
         console.log(text,    rating)
         if (!(text&&rating)) return res.status(400).json({

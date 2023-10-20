@@ -9,16 +9,16 @@ export class Comment {
   id: number;
   
   @ManyToOne(()=>User, i=>i.id )
-  userId: User;
+  user: User;
 
-  @OneToOne(()=>Image, i=>i.imgSrc)
+  @OneToOne(()=>Image, i=>i.id)
   img: Image;
 
   // @OneToOne(()=>Image, i=>i.imgSrc)
   // img: Image;
 
   @OneToOne(()=>Product, i=>i.id)
-  productId: Product;
+  product: Product;
 
   @Column()
   status: string;

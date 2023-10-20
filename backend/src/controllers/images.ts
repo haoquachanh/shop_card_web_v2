@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
 import { dataSource } from "../datasource"
-import { Product } from "../entities/Product"
 import { Image } from "../entities/Image"
 import RemoveImage from "../helper/remover"
+import { Brackets } from 'typeorm';
+
 
 class ImagesController{
     async uploadImage(req: Request, res: Response){
@@ -11,13 +12,13 @@ class ImagesController{
             // if (!id) return res.status(400).json({err:1, mes: "Missing id"})
             if (!req.files) return res.status(400).json({err:1, mes: "No files images found"})
     
-            // const theProduct = await dataSource.getRepository(Product).findOne({where: {id:id}})
-            // if (!theProduct) return res.status(404).json({err:1, mes: "User not found"})
+            // const theImage = await dataSource.getRepository(Image).findOne({where: {id:id}})
+            // if (!theImage) return res.status(404).json({err:1, mes: "User not found"})
             for (let i=0; i<req.files.length; i++)
             {
                 let newImage = new Image()
                 newImage.imgSrc= req.files[i].path
-                // newImage.product =  theProduct
+                // newImage.product =  theImage
                 await dataSource.getRepository(Image).save(newImage)
             }    
             res.status(200).json({
@@ -33,8 +34,188 @@ class ImagesController{
             res.status(500).json({message: "Iternal Error", error: error.message})
         }
     }    
-    async temp(req:Request, res: Response){}
-
+    async getAll(req: Request, res: Response) {
+        try {
+            const theRepository = dataSource.getRepository(Image);
+            const only = req.query.only
+            const page = parseInt(req.query.page as string);
+            const pageSize = parseInt(req.query.pageSize as string);
+            const filter = req.query.filter as string; // Tham số để lọc theo loại
+            const sortParam = req.query.sort as string; // Tham số để sắp xếp
+            const searchKeyword = req.query.search as string;
+            const skip = (page - 1) * pageSize;
+        
+            const queryBuilder = await theRepository
+                .createQueryBuilder('images')
+                
+            if (page && pageSize)
+                queryBuilder
+                .skip(skip)
+                .take(pageSize)
+            
+            if (only)
+                queryBuilder.select(`images.${only}`)
+            
+            if (filter) {
+                let filters = filter.split(',') 
+                filters.forEach((i)=>{
+                    const [field,value] = i.split(':')
+                    queryBuilder.where(`images.${field} = :value`, {value})
+                })
+                }
+    
+            if (sortParam){
+                const [field, order] = sortParam.split(':');
+                queryBuilder.orderBy(`images.${field}`, order as 'ASC' | 'DESC');
+            }
+    
+            if (searchKeyword) {
+                queryBuilder.andWhere(new Brackets(qb => {
+                qb.where('LOWER(images.category) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.name) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.effect) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.material) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.cut) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                }));
+            }
+    
+            const images= await queryBuilder.getMany();
+            const count= await queryBuilder.getCount();
+    
+            if (count === 0) return res.status(200).json({
+                err:1,
+                mes: "No have any images"
+            })
+    
+            
+            if (page && pageSize)
+            {
+                let pageNum=Math.ceil(count/pageSize)
+                if (page>pageNum) return res.status(404).json({
+                    err: 1,
+                    mes: "Page not found"
+                })
+                res.status(200).json({
+                    err: 0,
+                    mes: `Got ${count} images.`,
+                    pageSize: pageSize,
+                    pageNum: pageNum,
+                    page: page,
+                    data: images
+                })
+            }
+            res.status(200).json({
+                err: 0,
+                mes: `Got ${count} images.`,
+                data: images
+            })
+            }
+            catch (error) {
+                res.status(500).json({ error: 'Internal server error' });
+            }
+        }
+    async setProductId(req: Request, res: Response) {
+        try {
+            let a:number[];
+            a = req.body.productIds
+            const theRepository = dataSource.getRepository(Image);
+            const only = req.query.only
+            const page = parseInt(req.query.page as string);
+            const pageSize = parseInt(req.query.pageSize as string);
+            const filter = req.query.filter as string; // Tham số để lọc theo loại
+            const sortParam = req.query.sort as string; // Tham số để sắp xếp
+            const searchKeyword = req.query.search as string;
+            const skip = (page - 1) * pageSize;
+        
+            const queryBuilder = await theRepository
+                .createQueryBuilder('images')
+                
+            if (page && pageSize)
+                queryBuilder
+                .skip(skip)
+                .take(pageSize)
+            
+            if (only)
+                queryBuilder.select(`images.${only}`)
+            
+            if (filter) {
+                let filters = filter.split(',') 
+                filters.forEach((i)=>{
+                    const [field,value] = i.split(':')
+                    queryBuilder.where(`images.${field} = :value`, {value})
+                })
+                }
+    
+            if (sortParam){
+                const [field, order] = sortParam.split(':');
+                queryBuilder.orderBy(`images.${field}`, order as 'ASC' | 'DESC');
+            }
+    
+            if (searchKeyword) {
+                queryBuilder.andWhere(new Brackets(qb => {
+                qb.where('LOWER(images.category) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.name) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.effect) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.material) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                qb.where('LOWER(images.cut) LIKE LOWER(:searchKeyword)', {
+                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
+                });
+                }));
+            }
+    
+            const images= await queryBuilder.getMany();
+            const count= await queryBuilder.getCount();
+    
+            if (count === 0) return res.status(200).json({
+                err:1,
+                mes: "No have any images"
+            })
+    
+            
+            if (page && pageSize)
+            {
+                let pageNum=Math.ceil(count/pageSize)
+                if (page>pageNum) return res.status(404).json({
+                    err: 1,
+                    mes: "Page not found"
+                })
+                res.status(200).json({
+                    err: 0,
+                    mes: `Got ${count} images.`,
+                    pageSize: pageSize,
+                    pageNum: pageNum,
+                    page: page,
+                    data: images
+                })
+            }
+            res.status(200).json({
+                err: 0,
+                mes: `Got ${count} images.`,
+                data: images
+            })
+            }
+            catch (error) {
+                res.status(500).json({ error: 'Internal server error' });
+            }
+        }    
 }
     
 export default ImagesController
