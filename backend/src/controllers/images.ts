@@ -3,6 +3,7 @@ import { dataSource } from "../datasource"
 import { Image } from "../entities/Image"
 import RemoveImage from "../helper/remover"
 import { Brackets } from 'typeorm';
+import { Product } from "../entities/Product";
 
 
 class ImagesController{
@@ -47,14 +48,14 @@ class ImagesController{
         
             const queryBuilder = await theRepository
                 .createQueryBuilder('images')
-                
+            queryBuilder
+                .leftJoin("images.product","product")
+                .addSelect("product.id")
+
             if (page && pageSize)
                 queryBuilder
                 .skip(skip)
                 .take(pageSize)
-            
-            if (only)
-                queryBuilder.select(`images.${only}`)
             
             if (filter) {
                 let filters = filter.split(',') 
@@ -97,7 +98,6 @@ class ImagesController{
                 mes: "No have any images"
             })
     
-            
             if (page && pageSize)
             {
                 let pageNum=Math.ceil(count/pageSize)
@@ -126,96 +126,34 @@ class ImagesController{
         }
     async setProductId(req: Request, res: Response) {
         try {
-            let a:number[];
-            a = req.body.productIds
+            let productId = parseInt(req.params.id)
+            let imgIds:number[];
+            imgIds = req.body.imgIds
+            console.log(imgIds[0])
             const theRepository = dataSource.getRepository(Image);
-            const only = req.query.only
-            const page = parseInt(req.query.page as string);
-            const pageSize = parseInt(req.query.pageSize as string);
-            const filter = req.query.filter as string; // Tham số để lọc theo loại
-            const sortParam = req.query.sort as string; // Tham số để sắp xếp
-            const searchKeyword = req.query.search as string;
-            const skip = (page - 1) * pageSize;
-        
-            const queryBuilder = await theRepository
-                .createQueryBuilder('images')
-                
-            if (page && pageSize)
-                queryBuilder
-                .skip(skip)
-                .take(pageSize)
+            const data = await theRepository.createQueryBuilder("images")
+                .leftJoin("images.product","product")
+                .addSelect("product.id")
+                .where("images.id IN (:...ids)", { ids: imgIds })
+                .getMany();
             
-            if (only)
-                queryBuilder.select(`images.${only}`)
-            
-            if (filter) {
-                let filters = filter.split(',') 
-                filters.forEach((i)=>{
-                    const [field,value] = i.split(':')
-                    queryBuilder.where(`images.${field} = :value`, {value})
-                })
-                }
-    
-            if (sortParam){
-                const [field, order] = sortParam.split(':');
-                queryBuilder.orderBy(`images.${field}`, order as 'ASC' | 'DESC');
-            }
-    
-            if (searchKeyword) {
-                queryBuilder.andWhere(new Brackets(qb => {
-                qb.where('LOWER(images.category) LIKE LOWER(:searchKeyword)', {
-                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-                });
-                qb.where('LOWER(images.name) LIKE LOWER(:searchKeyword)', {
-                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-                });
-                qb.where('LOWER(images.effect) LIKE LOWER(:searchKeyword)', {
-                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-                });
-                qb.where('LOWER(images.material) LIKE LOWER(:searchKeyword)', {
-                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-                });
-                qb.where('LOWER(images.cut) LIKE LOWER(:searchKeyword)', {
-                    searchKeyword: `%${searchKeyword.toLowerCase()}%`,
-                });
-                }));
-            }
-    
-            const images= await queryBuilder.getMany();
-            const count= await queryBuilder.getCount();
-    
-            if (count === 0) return res.status(200).json({
-                err:1,
-                mes: "No have any images"
-            })
-    
-            
-            if (page && pageSize)
-            {
-                let pageNum=Math.ceil(count/pageSize)
-                if (page>pageNum) return res.status(404).json({
-                    err: 1,
-                    mes: "Page not found"
-                })
-                res.status(200).json({
-                    err: 0,
-                    mes: `Got ${count} images.`,
-                    pageSize: pageSize,
-                    pageNum: pageNum,
-                    page: page,
-                    data: images
-                })
-            }
+            let theProduct = await dataSource.getRepository(Product).findOne({where: {id: productId}})
+            data.forEach(async (entity) => {
+                entity.product = theProduct;
+                await theRepository.save(entity);
+            });
+
             res.status(200).json({
                 err: 0,
-                mes: `Got ${count} images.`,
-                data: images
+                mes: `Success`,
+                data: data
             })
             }
             catch (error) {
-                res.status(500).json({ error: 'Internal server error' });
+                res.status(500).json({ error: 'Internal server error'+error.message });
             }
-        }    
+        }
+    
 }
     
 export default ImagesController

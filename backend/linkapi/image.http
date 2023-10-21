@@ -8,15 +8,13 @@ GET http://localhost:3001/api/image/14
 DELETE http://localhost:3001/api/image/14
 
 ###
-POST http://localhost:3001/api/image
+POST http://localhost:3001/api/image/product/100017
 Content-Type: application/json
 
 {
-    "imagename": "image1234",
-    "password": "password",
-    "fullname": "User Full Name",
-    "email": "VinhYeuNhiMaimai@example.com",
-    "avt": "https://example.avt.com"
+    "imgIds": [
+        171,170
+    ]
 }
 
 
