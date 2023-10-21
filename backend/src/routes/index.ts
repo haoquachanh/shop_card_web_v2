@@ -29,7 +29,7 @@ router.use('/user', userRouter);
 router.use('/image', managerImgRouter); 
 
 //need login
-router.use(verifyJWT)
+// router.use(verifyJWT)
 router.use('/cart', cartRouter); 
 router.use('/order', orderRouter); 
 

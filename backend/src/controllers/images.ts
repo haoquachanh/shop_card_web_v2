@@ -4,6 +4,7 @@ import { Image } from "../entities/Image"
 import RemoveImage from "../helper/remover"
 import { Brackets } from 'typeorm';
 import { Product } from "../entities/Product";
+import { ImageSlider } from "../entities/ImageSlider";
 
 
 class ImagesController{
@@ -153,7 +154,37 @@ class ImagesController{
                 res.status(500).json({ error: 'Internal server error'+error.message });
             }
         }
-    
+    async addToSlider(req: Request, res: Response) {
+        try {
+            let imgIds:number[];
+            imgIds = req.body.imgIds
+            console.log(imgIds[0])
+            const theRepository = dataSource.getRepository(Image);
+            const data = await theRepository.createQueryBuilder("images")
+                .leftJoin("images.product","product")
+                .addSelect("product.id")
+                .where("images.id IN (:...ids)", { ids: imgIds })
+                .getMany();
+            
+            data.forEach(async (entity) => {
+                let theSlider:ImageSlider
+                theSlider.product = entity.product
+                theSlider.img = entity
+                theSlider.status = "active"
+                theSlider.index = 6
+                await dataSource.getRepository(ImageSlider).save(entity);
+            });
+
+            res.status(200).json({
+                err: 0,
+                mes: `Success`,
+                data: data
+            })
+            }
+            catch (error) {
+                res.status(500).json({ error: 'Internal server error'+error.message });
+            }
+        }
 }
     
 export default ImagesController
