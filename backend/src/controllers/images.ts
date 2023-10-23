@@ -185,6 +185,46 @@ class ImagesController{
                 res.status(500).json({ error: 'Internal server error'+error.message });
             }
         }
+    async setProductAvt(req: Request, res: Response) {
+        try {
+            let productId = parseInt(req.params.id)
+            let imgId:number;
+            imgId = req.body.imgId
+            const theImage = await dataSource.getRepository(Image).findOne({where:{id:imgId}})
+            
+            let theProduct = await dataSource.getRepository(Product).findOne({where: {id: productId}})
+            theProduct.avt= theImage
+            await dataSource.getRepository(Product).save(theProduct);
+
+            res.status(200).json({
+                err: 0,
+                mes: `Success`,
+            })
+            }
+            catch (error) {
+                res.status(500).json({ error: 'Internal server error'+error.message });
+            }
+        }
+    async setProductAvtHover(req: Request, res: Response) {
+        try {
+            let productId = parseInt(req.params.id)
+            let imgId:number;
+            imgId = req.body.imgId
+            const theImage = await dataSource.getRepository(Image).findOne({where:{id:imgId}})
+
+            let theProduct = await dataSource.getRepository(Product).findOne({where: {id: productId}})
+            theProduct.avt_hover= theImage
+            await dataSource.getRepository(Product).save(theProduct);
+
+            res.status(200).json({
+                err: 0,
+                mes: `Success`,
+            })
+            }
+            catch (error) {
+                res.status(500).json({ error: 'Internal server error'+error.message });
+            }
+        }
 }
     
 export default ImagesController
