@@ -10,8 +10,8 @@ CommentRouter.get('/', commentController.getAll);
 
 CommentRouter.get('/:id', commentController.get);
 
-CommentRouter.post('/', commentController.create);
 CommentRouter.use(verifyJWT)
+CommentRouter.post('/', commentController.create);
 
 CommentRouter.put('/:id', commentController.update);
 

@@ -3,4 +3,5 @@ node_modules/
 /.env
 /ormconfig.json
 /dist
+/Dockerfile
 note.md
