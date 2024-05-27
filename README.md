@@ -1,2 +1,3 @@
 # shop_card_web_v2
-Typescript version.
+Backend: Typescript version of shopcardbackend.
+Typescript - orm: typeorm.
